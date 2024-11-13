@@ -1,6 +1,7 @@
 import 'package:dart_quill_delta/dart_quill_delta.dart';
 import 'package:flutter_quill_delta_from_html/flutter_quill_delta_from_html.dart';
 import 'package:html/dom.dart' as dom;
+import 'package:flutter_quill_delta_from_html/parser/html_utils.dart';
 
 /// Processes a DOM [node], converting it into Quill Delta operations.
 ///
@@ -41,7 +42,9 @@ void processNode(
     if (node.isStrike) newAttributes['strike'] = true;
     if (node.isSubscript) newAttributes['script'] = 'sub';
     if (node.isSuperscript) newAttributes['script'] = 'super';
-
+    final String style = node.attributes['style'] ?? '';
+    final styleAttributes = parseStyleAttribute(style);
+    newAttributes.addAll({...styleAttributes});
     // Use custom block definitions if provided
     bool handled = false;
     if (customBlocks != null && customBlocks.isNotEmpty) {
