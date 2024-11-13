@@ -43,6 +43,7 @@ void processNode(
     if (node.isSuperscript) newAttributes['script'] = 'super';
 
     // Use custom block definitions if provided
+    bool handled = false;
     if (customBlocks != null && customBlocks.isNotEmpty) {
       for (var customBlock in customBlocks) {
         if (customBlock.matches(node)) {
@@ -51,10 +52,11 @@ void processNode(
           operations.forEach((Operation op) {
             delta.insert(op.data, op.attributes);
           });
-          continue;
+          handled = true;
         }
       }
-    } else {
+    } 
+    if (!handled) {
       // Handle <span> tags
       if (node.isSpan) {
         final spanAttributes =
